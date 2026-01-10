@@ -35,10 +35,12 @@ class ModelTrainer:
         
     def track_mlflow(self,best_model,classificationmetric):
         with mlflow.start_run():
+            accuracy_score = classificationmetric.accuracy_score
             f1_score=classificationmetric.f1_score
             precision_score=classificationmetric.precision_score
             recall_score=classificationmetric.recall_score
     
+            mlflow.log_metric("accuracy_score:",accuracy_score)
             mlflow.log_metric("f1_score",f1_score)
             mlflow.log_metric("precision",precision_score)
             mlflow.log_metric("recall_score",recall_score)
@@ -119,6 +121,7 @@ class ModelTrainer:
                              train_metric_artifact=classification_train_metric,
                              test_metric_artifact=classification_test_metric
                              )
+        logging.info(f"Best Model: {best_model}")
         logging.info(f"Model trainer artifact: {model_trainer_artifact}")
         return model_trainer_artifact
 

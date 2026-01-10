@@ -1,6 +1,7 @@
 '''
-The setup.py is an essential part of packaging and distributing the Python Projects. It is used by setup tools 
-(or distutils in python versions) to define the configuration of your projects, such as its metadata, dependencies and more
+The setup.py is an essential part of packaging and distributing the Python Projects. 
+It is used by setup tools (or distutils in python versions) to define the configuration of your projects, 
+such as its metadata, dependencies and more
 '''
 
 from setuptools import find_packages, setup
