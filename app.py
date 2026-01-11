@@ -8,7 +8,7 @@ ca = certifi.where()
 from dotenv import load_dotenv
 load_dotenv()
 mongo_db_url = os.getenv("MONGODB_URL_KEY")
-print(mongo_db_url)
+# print(mongo_db_url)
 import pymongo
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
@@ -78,7 +78,7 @@ async def predict_route(request: Request,file: UploadFile = File(...)):
         df.to_csv('prediction_output/output.csv')
         table_html = df.to_html(classes='table table-striped')
         #print(table_html)
-        
+
         return templates.TemplateResponse("table.html", {"request": request, "table": table_html})
         
     except Exception as e:
