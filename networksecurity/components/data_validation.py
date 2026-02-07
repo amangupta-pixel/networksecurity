@@ -26,16 +26,21 @@ class DataValidation:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
     
-    def validate_number_of_columns(self,dataframe:pd.DataFrame)->bool:
+    def validate_number_of_columns(self, dataframe: pd.DataFrame) -> bool:
         try:
-            number_of_columns = len(self._schema_config)
-            logging.info(f"Required number of columns:{number_of_columns}")
-            logging.info(f"Dataframe has columns:{len(dataframe.columns)}")
-            if len(dataframe.columns)==number_of_columns:
-                return True
-            return False
+            expected_columns = [
+            list(col_dict.keys())[0]
+            for col_dict in self._schema_config["columns"]
+        ]
+
+            logging.info(f"Expected columns: {len(expected_columns)}")
+            logging.info(f"Actual columns: {len(list(dataframe.columns))}")
+
+            return set(expected_columns) == set(dataframe.columns)
+
         except Exception as e:
-            raise NetworkSecurityException(e,sys)
+            raise Exception(e, sys)
+
 
     def detect_dataset_drift(self,base_df,current_df,threshold=0.05)->bool:
         try:
@@ -75,12 +80,15 @@ class DataValidation:
 
             ## Validate number of columns
 
+            # Validate train data
             status = self.validate_number_of_columns(dataframe=train_dataframe)
             if not status:
-                error_message=f"Train dataframe doesn't contains all columns.\n"
+                raise Exception("Train dataframe does not contain expected columns")
+
+            # Validate test data
             status = self.validate_number_of_columns(dataframe=test_dataframe)
             if not status:
-                error_message=f"Test dataframe doesn't contains all columns.\n"
+                raise Exception("Test dataframe does not contain expected columns")
 
             ## check if numerical columns exist --> Do by yourself
 
